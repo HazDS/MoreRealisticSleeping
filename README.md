@@ -12,21 +12,13 @@
     The effects are most likely client-side, meaning that it won't be visible in Mutliplayer
     It might not work for Joining Players (please test this yourself)
 
-
-## 🆕 Whats new in V1.0.3?
-- **Fixed Menu Loading Bug**
-    Error when loading into the game, then back to the menu is now fixed.
-- **Feature: Murdered Event**
-    There is now a configurable probability to get murdered, when not sleeping in one of your properties.
-    Properties are currently all Private Properties and Business Properties. This Event will not get triggered as long as you're in the close proximity of these buildings. (You can also turn this of if preferred)
-    You can also configure if you will respawn after this event got triggered or if you want to keep it as standard (in Singleplayer: loading last save).
-    If you're respawning you will have to pay the hospital bill.
-- **Feature: Arrested Event**
-    There is now a configurable probability to get arrested, when not sleeping in one of your properties.
-    Properties are currently all Private Properties and Business Properties. This Event will not get triggered as long as you're in the close proximity of these buildings. (You can also turn this of if preferred)
-    If you get arrested, your product will be taken away and you have to pay for your crimes. (There is many synonyms for "Public Sleeping" in the Mod)
-- **Config Changes**
-    Adjusted the Default Config accordingly
+## 🆕 Whats new in V1.0.4?
+- **Updated for Schedule I v0.4.2f9**
+    The mod has been updated to work with the latest version of Schedule I (IL2CPP Main Branch).
+- **Embedded Assets**
+    All images and icons are now embedded directly in the DLL. No more external asset files needed in the UserData folder.
+- **API Compatibility Fixes**
+    Fixed breaking changes from game updates including namespace migrations and method signature changes.
 
 ![Murdered Event](https://github.com/user-attachments/assets/67a83d73-6b28-4ed0-931a-8ec20bff2f72)
 

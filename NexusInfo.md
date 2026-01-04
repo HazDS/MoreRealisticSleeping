@@ -18,23 +18,15 @@ The effects are most likely client-side, meaning that it won't be visible in Mut
 It might not work for Joining Players (please test this yourself)
 [/list]
 
-[size=5][b]🆕 Whats new in V1.0.3?[/b][/size]
+[size=5][b]🆕 Whats new in V1.0.4?[/b][/size]
 [list]
-[*][b]Fixed Menu Loading Bug[/b]
-Error when loading into the game, then back to the menu is now fixed.
-[*][b]Feature: Murdered Event[/b]
-There is now a configurable probability to get murdered, when not sleeping in one of your properties.
-Properties are currently all Private Properties and Business Properties. This Event will not get triggered as long as you're in the close proximity of these buildings. (You can also turn this of if preferred)
-You can also configure if you will respawn after this event got triggered or if you want to keep it as standard (in Singleplayer: loading last save).
-If you're respawning you will have to pay the hospital bill.
-[*][b]Feature: Arrested Event[/b]
-There is now a configurable probability to get arrested, when not sleeping in one of your properties.
-Properties are currently all Private Properties and Business Properties. This Event will not get triggered as long as you're in the close proximity of these buildings. (You can also turn this of if preferred)
-If you get arrested, your product will be taken away and you have to pay for your crimes. (There is many synonyms for "Public Sleeping" in the Mod)
-[*][b]Config Changes[/b]
-Adjusted the Default Config accordingly
+[*][b]Updated for Schedule I v0.4.2f9[/b]
+The mod has been updated to work with the latest version of Schedule I (IL2CPP Main Branch).
+[*][b]Embedded Assets[/b]
+All images and icons are now embedded directly in the DLL. No more external asset files needed in the UserData folder.
+[*][b]API Compatibility Fixes[/b]
+Fixed breaking changes from game updates including namespace migrations and method signature changes.
 [/list]
-
 
 [center][img]https://github.com/user-attachments/assets/67a83d73-6b28-4ed0-931a-8ec20bff2f72[/img][/center]
 [center][img]https://github.com/user-attachments/assets/0c9bc414-60f8-419a-8366-7cbd3d934b59[/img][/center]
@@ -233,8 +225,11 @@ The mod's settings can be customized via the `MoreRealisticSleeping.json` config
 }
 [/code]
 
+[size=4][b]Credits[/b][/size]
 
-[size=5]Download Mirrors[/size]
-
-[url=https://github.com/KampfBallerina/MoreRealisticSleeping][b]GitHub[/b][/url]
-[url=https://thunderstore.io/c/schedule-i/p/KampfBallerina/MoreRealisticSleeping/][b]ThunderStore[/b][/url]
+This mod was originally created by [b]KampfBallerina[/b]. This version is a continuation released with their permission.
+[list]
+[*][b]Original Author:[/b] [url=https://github.com/KampfBallerina]KampfBallerina[/url]
+[*][b]Original NexusMods Page:[/b] [url=https://www.nexusmods.com/schedule1/mods/909]MoreRealisticSleeping[/url]
+[*][b]Original Thunderstore Page:[/b] [url=https://thunderstore.io/c/schedule-i/p/KampfBallerina/MoreRealisticSleeping/]MoreRealisticSleeping[/url]
+[/list]
