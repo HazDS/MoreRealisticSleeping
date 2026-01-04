@@ -31,11 +31,11 @@ namespace MoreRealisticSleeping.PhoneApp
                 MelonLogger.Msg("Waiting for Fonts to be loaded...");
                 yield return new WaitForSeconds(2f);
             }
-            yield return MelonCoroutines.Start(CreateApp("SleepDose", "SleepDose", true, AppIconFilePath));
+            yield return MelonCoroutines.Start(CreateApp("SleepDose", "SleepDose", true, EmbeddedAssets.LoadAppIcon()));
             yield break;
         }
 
-        public IEnumerator CreateApp(string IDName, string Title, bool IsRotated = true, string IconPath = null)
+        public IEnumerator CreateApp(string IDName, string Title, bool IsRotated = true, Sprite iconSprite = null)
         {
             GameObject cloningCandidateProducts = null;
             string cloningNameProducts = null;
@@ -250,7 +250,7 @@ namespace MoreRealisticSleeping.PhoneApp
             GameObject appIconByName = Utils.ChangeLabelFromAppIcon(cloningNameProducts, Title);
 
             // Ändere das App-Icon-Bild
-            MRSCore.Instance.ChangeAppIconImage(appIconByName, IconPath);
+            MRSCore.Instance.ChangeAppIconImage(appIconByName, iconSprite);
 
             // Registriere die App
             MRSCore.Instance.RegisterApp(appIconByName, Title);
@@ -481,7 +481,7 @@ namespace MoreRealisticSleeping.PhoneApp
         }
 
         public void AddEntryFromTemplate(string newObjectName, string newTitle, string newSubtitle = null, GameObject template = null, Color newBackgroundColor = default,
-        string imagePath = null, Transform parentTransform = null, bool isFirstEntry = false)
+        Sprite iconSprite = null, Transform parentTransform = null, bool isFirstEntry = false)
         {
             if (parentTransform == null)
             {
@@ -498,7 +498,7 @@ namespace MoreRealisticSleeping.PhoneApp
 
             if (template == null)
             {
-                if (imagePath != null && File.Exists(imagePath))
+                if (iconSprite != null)
                 {
                     if (DansHardwareTemplate)
                     {
@@ -556,27 +556,12 @@ namespace MoreRealisticSleeping.PhoneApp
             }
 
             // Change Icon Image
-            if (!string.IsNullOrEmpty(imagePath) && File.Exists(imagePath))
+            if (iconSprite != null)
             {
-                byte[] imageData = File.ReadAllBytes(imagePath);
-                Texture2D texture = new Texture2D(2, 2);
-                if (texture.LoadImage(imageData))
+                Image iconImageComponent = imageTransform.GetComponent<Image>();
+                if (iconImageComponent != null)
                 {
-                    Sprite newSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-                    Image iconImageComponent = imageTransform.GetComponent<Image>();
-                    if (iconImageComponent != null)
-                    {
-                        iconImageComponent.sprite = newSprite;
-
-                        if (imagePath.Contains("SleepingAppIcon.png"))
-                        {
-                            appIconSprite = newSprite;
-                        }
-                    }
-                }
-                else
-                {
-                    MelonLogger.Error($"Failed to load image from path: {imagePath}");
+                    iconImageComponent.sprite = iconSprite;
                 }
             }
 
@@ -1027,27 +1012,15 @@ namespace MoreRealisticSleeping.PhoneApp
                 buttonImage = saveButtonObject.AddComponent<Image>();
                 if (saveButtonSprite == null)
                 {
-                    string imagePath = Path.Combine(UIElementsFolder, "SaveButton.png");
-                    if (!string.IsNullOrEmpty(imagePath) && File.Exists(imagePath))
-                    {
-                        byte[] imageData = File.ReadAllBytes(imagePath);
-                        Texture2D texture = new Texture2D(2, 2);
-                        if (texture.LoadImage(imageData))
-                        {
-                            Sprite newSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-                            saveButtonSprite = newSprite;
-                            buttonImage.sprite = newSprite;
-                        }
-                        else
-                        {
-                            MelonLogger.Error($"Failed to load image from path: {imagePath}");
-                            buttonImage.color = new Color(0.2f, 0.6f, 0.2f); // Grüne Farbe für den Button
-                        }
-                    }
+                    saveButtonSprite = EmbeddedAssets.LoadUIElementSprite("SaveButton");
+                }
+                if (saveButtonSprite != null)
+                {
+                    buttonImage.sprite = saveButtonSprite;
                 }
                 else
                 {
-                    buttonImage.sprite = saveButtonSprite;
+                    buttonImage.color = new Color(0.2f, 0.6f, 0.2f); // Grüne Farbe für den Button
                 }
             }
 
@@ -1201,27 +1174,15 @@ namespace MoreRealisticSleeping.PhoneApp
 
                 if (inputBackgroundSprite == null)
                 {
-                    string imagePath = Path.Combine(UIElementsFolder, "InputBackground.png");
-                    if (!string.IsNullOrEmpty(imagePath) && File.Exists(imagePath))
-                    {
-                        byte[] imageData = File.ReadAllBytes(imagePath);
-                        Texture2D texture = new Texture2D(2, 2);
-                        if (texture.LoadImage(imageData))
-                        {
-                            Sprite newSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-                            inputBackgroundSprite = newSprite;
-                            backgroundImage.sprite = newSprite;
-                        }
-                        else
-                        {
-                            MelonLogger.Error($"Failed to load image from path: {imagePath}");
-                            backgroundImage.color = ColorUtil.GetColor("Grey");
-                        }
-                    }
+                    inputBackgroundSprite = EmbeddedAssets.LoadUIElementSprite("InputBackground");
+                }
+                if (inputBackgroundSprite != null)
+                {
+                    backgroundImage.sprite = inputBackgroundSprite;
                 }
                 else
                 {
-                    backgroundImage.sprite = inputBackgroundSprite;
+                    backgroundImage.color = ColorUtil.GetColor("Grey");
                 }
             }
 
@@ -1325,21 +1286,7 @@ namespace MoreRealisticSleeping.PhoneApp
         {
             if (appIconSprite == null)
             {
-                string imagePath = Path.Combine(ConfigFolder, "SleepingAppIcon.png");
-                if (!string.IsNullOrEmpty(imagePath) && File.Exists(imagePath))
-                {
-                    byte[] imageData = File.ReadAllBytes(imagePath);
-                    Texture2D texture = new Texture2D(2, 2);
-                    if (texture.LoadImage(imageData))
-                    {
-                        Sprite newSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-                        appIconSprite = newSprite;
-                    }
-                    else
-                    {
-                        MelonLogger.Error($"Failed to load image from path: {imagePath}");
-                    }
-                }
+                appIconSprite = EmbeddedAssets.LoadAppIcon();
             }
 
             string subTitleString; //= $"for <color=#329AC5>{displayName}</color>";
@@ -1687,31 +1634,11 @@ namespace MoreRealisticSleeping.PhoneApp
             if (MRSCore.Instance.notificationsManager != null)
             {
                 string subTitleString = "Config saved";
-                Sprite notificationSprite = null;
-                if (settingsSprite)
+                if (settingsSprite == null)
                 {
-                    notificationSprite = settingsSprite;
+                    settingsSprite = EmbeddedAssets.LoadUIElementSprite("Settings");
                 }
-                if (notificationSprite == null)
-                {
-                    string imagePath = Path.Combine(UIElementsFolder, "Settings.png");
-                    if (!string.IsNullOrEmpty(imagePath) && File.Exists(imagePath))
-                    {
-                        byte[] imageData = File.ReadAllBytes(imagePath);
-                        Texture2D texture = new Texture2D(2, 2);
-                        if (texture.LoadImage(imageData))
-                        {
-                            Sprite newSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-                            settingsSprite = newSprite;
-                            notificationSprite = settingsSprite;
-                        }
-                        else
-                        {
-                            MelonLogger.Error($"Failed to load image from path: {imagePath}");
-                        }
-                    }
-                }
-                MRSCore.Instance.notificationsManager.SendNotification("General Settings", subTitleString, notificationSprite, 5, true);
+                MRSCore.Instance.notificationsManager.SendNotification("General Settings", subTitleString, settingsSprite, 5, true);
             }
 
             // MRSCore.Instance.monitorTimeForSleepCoroutine = (Coroutine)MelonCoroutines.Start(MRSCore.Instance.MonitorTimeForSleep());
@@ -1996,34 +1923,12 @@ namespace MoreRealisticSleeping.PhoneApp
             if (MRSCore.Instance.notificationsManager != null)
             {
                 string subTitleString = "Config saved";
-                Sprite notificationSprite = null;
-                if (positiveEffectsSprite)
+                if (positiveEffectsSprite == null)
                 {
-                    notificationSprite = positiveEffectsSprite;
+                    positiveEffectsSprite = EmbeddedAssets.LoadUIElementSprite("PositiveEffects");
                 }
-                if (notificationSprite == null)
-                {
-                    string imagePath = Path.Combine(UIElementsFolder, "PositiveEffects.png");
-                    if (!string.IsNullOrEmpty(imagePath) && File.Exists(imagePath))
-                    {
-                        byte[] imageData = File.ReadAllBytes(imagePath);
-                        Texture2D texture = new Texture2D(2, 2);
-                        if (texture.LoadImage(imageData))
-                        {
-                            Sprite newSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-                            positiveEffectsSprite = newSprite;
-                            notificationSprite = positiveEffectsSprite;
-                        }
-                        else
-                        {
-                            MelonLogger.Error($"Failed to load image from path: {imagePath}");
-                        }
-                    }
-                }
-                MRSCore.Instance.notificationsManager.SendNotification("Positive Effects", subTitleString, notificationSprite, 5, true);
+                MRSCore.Instance.notificationsManager.SendNotification("Positive Effects", subTitleString, positiveEffectsSprite, 5, true);
             }
-
-            //   MRSCore.Instance.monitorTimeForSleepCoroutine = (Coroutine)MelonCoroutines.Start(MRSCore.Instance.MonitorTimeForSleep());
 
             // Reaktiviere den Save-Button
             if (saveButton != null)
@@ -2374,34 +2279,12 @@ namespace MoreRealisticSleeping.PhoneApp
             if (MRSCore.Instance.notificationsManager != null)
             {
                 string subTitleString = "Config saved";
-                Sprite notificationSprite = null;
-                if (negativeEffectsSprite)
+                if (negativeEffectsSprite == null)
                 {
-                    notificationSprite = negativeEffectsSprite;
+                    negativeEffectsSprite = EmbeddedAssets.LoadUIElementSprite("NegativeEffects");
                 }
-                if (notificationSprite == null)
-                {
-                    string imagePath = Path.Combine(UIElementsFolder, "NegativeEffects.png");
-                    if (!string.IsNullOrEmpty(imagePath) && File.Exists(imagePath))
-                    {
-                        byte[] imageData = File.ReadAllBytes(imagePath);
-                        Texture2D texture = new Texture2D(2, 2);
-                        if (texture.LoadImage(imageData))
-                        {
-                            Sprite newSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-                            negativeEffectsSprite = newSprite;
-                            notificationSprite = negativeEffectsSprite;
-                        }
-                        else
-                        {
-                            MelonLogger.Error($"Failed to load image from path: {imagePath}");
-                        }
-                    }
-                }
-                MRSCore.Instance.notificationsManager.SendNotification("Negative Effects", subTitleString, notificationSprite, 5, true);
+                MRSCore.Instance.notificationsManager.SendNotification("Negative Effects", subTitleString, negativeEffectsSprite, 5, true);
             }
-
-            // MRSCore.Instance.monitorTimeForSleepCoroutine = (Coroutine)MelonCoroutines.Start(MRSCore.Instance.MonitorTimeForSleep());
 
             // Reaktiviere den Save-Button
             if (saveButton != null)
@@ -2482,31 +2365,11 @@ namespace MoreRealisticSleeping.PhoneApp
             if (MRSCore.Instance.notificationsManager != null)
             {
                 string subTitleString = "Config saved";
-                Sprite notificationSprite = null;
-                if (arrestedEventSprite)
+                if (arrestedEventSprite == null)
                 {
-                    notificationSprite = arrestedEventSprite;
+                    arrestedEventSprite = EmbeddedAssets.LoadUIElementSprite("ArrestedEvent");
                 }
-                if (notificationSprite == null)
-                {
-                    string imagePath = Path.Combine(UIElementsFolder, "ArrestedEvent.png");
-                    if (!string.IsNullOrEmpty(imagePath) && File.Exists(imagePath))
-                    {
-                        byte[] imageData = File.ReadAllBytes(imagePath);
-                        Texture2D texture = new Texture2D(2, 2);
-                        if (texture.LoadImage(imageData))
-                        {
-                            Sprite newSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-                            arrestedEventSprite = newSprite;
-                            notificationSprite = arrestedEventSprite;
-                        }
-                        else
-                        {
-                            MelonLogger.Error($"Failed to load image from path: {imagePath}");
-                        }
-                    }
-                }
-                MRSCore.Instance.notificationsManager.SendNotification("Arrested Event", subTitleString, notificationSprite, 5, true);
+                MRSCore.Instance.notificationsManager.SendNotification("Arrested Event", subTitleString, arrestedEventSprite, 5, true);
             }
 
             // Reaktiviere den Save-Button
@@ -2727,31 +2590,11 @@ namespace MoreRealisticSleeping.PhoneApp
             if (MRSCore.Instance.notificationsManager != null)
             {
                 string subTitleString = "Config saved";
-                Sprite notificationSprite = null;
-                if (murderedEventSprite)
+                if (murderedEventSprite == null)
                 {
-                    notificationSprite = murderedEventSprite;
+                    murderedEventSprite = EmbeddedAssets.LoadUIElementSprite("MurderedEvent");
                 }
-                if (notificationSprite == null)
-                {
-                    string imagePath = Path.Combine(UIElementsFolder, "MurderedEvent.png");
-                    if (!string.IsNullOrEmpty(imagePath) && File.Exists(imagePath))
-                    {
-                        byte[] imageData = File.ReadAllBytes(imagePath);
-                        Texture2D texture = new Texture2D(2, 2);
-                        if (texture.LoadImage(imageData))
-                        {
-                            Sprite newSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-                            murderedEventSprite = newSprite;
-                            notificationSprite = murderedEventSprite;
-                        }
-                        else
-                        {
-                            MelonLogger.Error($"Failed to load image from path: {imagePath}");
-                        }
-                    }
-                }
-                MRSCore.Instance.notificationsManager.SendNotification("Murdered Event", subTitleString, notificationSprite, 5, true);
+                MRSCore.Instance.notificationsManager.SendNotification("Murdered Event", subTitleString, murderedEventSprite, 5, true);
             }
 
             // Reaktiviere den Save-Button
@@ -2770,9 +2613,6 @@ namespace MoreRealisticSleeping.PhoneApp
 
 
 
-        private static readonly string ConfigFolder = Path.Combine(MelonEnvironment.UserDataDirectory, "MoreRealisticSleeping");
-        private static readonly string AppIconFilePath = Path.Combine(ConfigFolder, "SleepingAppIcon.png");
-        private static readonly string UIElementsFolder = Path.Combine(ConfigFolder, "UIElements");
         public bool _isSleepingAppLoaded = false;
         private bool isSaveStillRunning = false;
         private Transform sleepingAppViewportContentTransform;

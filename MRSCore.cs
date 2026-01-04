@@ -6,12 +6,11 @@ using UnityEngine;
 using UnityEngine.Events;
 using Il2CppScheduleOne.PlayerScripts;
 using MoreRealisticSleeping.Config;
-using MelonLoader.Utils;
 using Il2CppScheduleOne.Money;
 using UnityEngine.UI;
 using MoreRealisticSleeping.Util;
 
-[assembly: MelonInfo(typeof(MoreRealisticSleeping.MRSCore), "MoreRealisticSleeping", "1.0.2", "KampfBallerina", null)]
+[assembly: MelonInfo(typeof(MoreRealisticSleeping.MRSCore), "MoreRealisticSleeping (Forked by HazDS)", "1.0.4", "KampfBallerina", null)]
 [assembly: MelonGame("TVGS", "Schedule I")]
 
 namespace MoreRealisticSleeping
@@ -38,9 +37,6 @@ namespace MoreRealisticSleeping
         public DailySummary dailySummary;
         public TimeManager timeManager = null;
         public ConfigState config = null;
-        private static readonly string ConfigFolder = Path.Combine(MelonEnvironment.UserDataDirectory, "MoreRealisticSleeping");
-        private static readonly string AppIconFilePath = Path.Combine(ConfigFolder, "SleepingAppIcon.png");
-        private static readonly string UIElementsFolder = Path.Combine(ConfigFolder, "UIElements");
         public NotificationsManager notificationsManager;
         public MoneyManager moneyManager;
         public PropertyManager propertyManager;
@@ -603,7 +599,7 @@ namespace MoreRealisticSleeping
                             else
                             {
                                 eventManager.AddNewPublicSleepingCrime();
-                                localPlayer.Arrest();
+                                localPlayer.Arrest_Server();
                             }
                         }
                         else
@@ -709,23 +705,23 @@ namespace MoreRealisticSleeping
                 }
             }
             //Settings
-            sleepingApp.AddEntryFromTemplate("GeneralSettingsSection", "General Settings", "~Forced Sleep, Enable/Disable Effects, Probabilitys, Durations~", null, ColorUtil.GetColor("Cyan"), Path.Combine(UIElementsFolder, "Settings.png"));
+            sleepingApp.AddEntryFromTemplate("GeneralSettingsSection", "General Settings", "~Forced Sleep, Enable/Disable Effects, Probabilitys, Durations~", null, ColorUtil.GetColor("Cyan"), Util.EmbeddedAssets.LoadUIElementSprite("Settings"));
 
-            sleepingApp.AddEntryFromTemplate("PositiveEffectsSection", "Positive Effects", "~Choose positive Early-Sleep-Effects~", null, ColorUtil.GetColor("Cyan"), Path.Combine(UIElementsFolder, "PositiveEffects.png"));
+            sleepingApp.AddEntryFromTemplate("PositiveEffectsSection", "Positive Effects", "~Choose positive Early-Sleep-Effects~", null, ColorUtil.GetColor("Cyan"), Util.EmbeddedAssets.LoadUIElementSprite("PositiveEffects"));
 
-            sleepingApp.AddEntryFromTemplate("NegativeEffectsSection", "Negative Effects", "~Choose negative Forced-Sleep-Effects~", null, ColorUtil.GetColor("Cyan"), Path.Combine(UIElementsFolder, "NegativeEffects.png"));
+            sleepingApp.AddEntryFromTemplate("NegativeEffectsSection", "Negative Effects", "~Choose negative Forced-Sleep-Effects~", null, ColorUtil.GetColor("Cyan"), Util.EmbeddedAssets.LoadUIElementSprite("NegativeEffects"));
 
-            sleepingApp.AddEntryFromTemplate("ArrestedEventSection", "Arrested Event", "~Adjust settings for the Arrested Event~", null, ColorUtil.GetColor("Cyan"), Path.Combine(UIElementsFolder, "ArrestedEvent.png"));
+            sleepingApp.AddEntryFromTemplate("ArrestedEventSection", "Arrested Event", "~Adjust settings for the Arrested Event~", null, ColorUtil.GetColor("Cyan"), Util.EmbeddedAssets.LoadUIElementSprite("ArrestedEvent"));
 
-            sleepingApp.AddEntryFromTemplate("MurderedEventSection", "Murdered Event", "~Adjust settings for the Murdered Event~", null, ColorUtil.GetColor("Cyan"), Path.Combine(UIElementsFolder, "MurderedEvent.png"));
+            sleepingApp.AddEntryFromTemplate("MurderedEventSection", "Murdered Event", "~Adjust settings for the Murdered Event~", null, ColorUtil.GetColor("Cyan"), Util.EmbeddedAssets.LoadUIElementSprite("MurderedEvent"));
 
         }
 
-        public void ChangeAppIconImage(GameObject appIcon, string ImagePath)
+        public void ChangeAppIconImage(GameObject appIcon, Sprite iconSprite)
         {
-            if (ImagePath == null)
+            if (iconSprite == null)
             {
-                MelonLogger.Msg("ImagePath is null, skipping image change.");
+                LoggerInstance.Msg("Icon sprite is null, skipping image change.");
                 return;
             }
             Transform transform = appIcon.transform.Find("Mask/Image");
@@ -735,18 +731,9 @@ namespace MoreRealisticSleeping
                 return;
             }
             Image component = gameObject.GetComponent<Image>();
-            if (!(component == null))
+            if (component != null)
             {
-                Texture2D texture2D = Utils.LoadCustomImage(ImagePath);
-                if (!(texture2D == null))
-                {
-                    Sprite sprite = Sprite.Create(texture2D, new Rect(0f, 0f, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
-                    component.sprite = sprite;
-                }
-                else
-                {
-                    ((MelonBase)this).LoggerInstance.Msg("Custom image failed to load");
-                }
+                component.sprite = iconSprite;
             }
         }
 
