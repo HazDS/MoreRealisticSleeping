@@ -12,6 +12,9 @@
     The effects are most likely client-side, meaning that it won't be visible in Mutliplayer
     It might not work for Joining Players (please test this yourself)
 
+## 🆕 Whats new in V1.0.5?
+- Fixed Product Manager Filter mod compatibility issue
+
 ## 🆕 Whats new in V1.0.4?
 - **Updated for Schedule I v0.4.2f9**
     The mod has been updated to work with the latest version of Schedule I (IL2CPP Main Branch).

@@ -1,4 +1,8 @@
 # Changelog
+## [1.0.5]
+
+### Fixed
+- Product Manager Filter mod compatibility issue
 
 ## [1.0.4]
 
