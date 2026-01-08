@@ -105,6 +105,15 @@ namespace MoreRealisticSleeping.PhoneApp
 
             Transform container = futureSleepApp.transform.Find("Container");
 
+            // Remove FiltersPanel if it exists (added by Product Manager Filter mod)
+            // This ensures compatibility when that mod is installed
+            Transform filtersPanel = container?.Find("FiltersPanel");
+            if (filtersPanel != null)
+            {
+                MelonLogger.Msg("Removing FiltersPanel from cloned app (Product Manager Filter compatibility)");
+                UnityEngine.Object.DestroyImmediate(filtersPanel.gameObject);
+            }
+
             //Adjust Topbar for Sleep App
             Transform topbarTransform = container.Find("Topbar");
             if (topbarTransform != null)
