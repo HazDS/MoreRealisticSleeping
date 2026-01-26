@@ -10,7 +10,7 @@ using Il2CppScheduleOne.Money;
 using UnityEngine.UI;
 using MoreRealisticSleeping.Util;
 
-[assembly: MelonInfo(typeof(MoreRealisticSleeping.MRSCore), "MoreRealisticSleeping (Forked by HazDS)", "1.0.5", "KampfBallerina", null)]
+[assembly: MelonInfo(typeof(MoreRealisticSleeping.MRSCore), "MoreRealisticSleeping (Forked by HazDS)", "1.0.6", "KampfBallerina", null)]
 [assembly: MelonGame("TVGS", "Schedule I")]
 
 namespace MoreRealisticSleeping

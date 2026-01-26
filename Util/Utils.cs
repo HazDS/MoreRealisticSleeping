@@ -45,12 +45,21 @@ namespace MoreRealisticSleeping.Util
                 MelonLogger.Error("AppIcon name or new label is null or empty.");
                 return null;
             }
+
+            // Try index 1 first (for when clones exist), fallback to 0
             GameObject appIconByName = Utils.GetAppIconByName(appIconName, 1, newLabel);
-            Transform labelTransform = appIconByName.transform.Find("Label");
-            GameObject labelObject = appIconByName != null ? labelTransform.gameObject : null;
-            if (labelObject != null)
+            appIconByName ??= Utils.GetAppIconByName(appIconName, 0, newLabel);
+
+            if (appIconByName == null)
             {
-                Text labelText = labelObject.GetComponent<Text>();
+                MelonLogger.Error($"Could not find app icon: {appIconName}");
+                return null;
+            }
+
+            Transform labelTransform = appIconByName.transform.Find("Label");
+            if (labelTransform != null)
+            {
+                Text labelText = labelTransform.GetComponent<Text>();
                 if (labelText != null)
                 {
                     labelText.text = newLabel;
