@@ -10,7 +10,7 @@ using Il2CppScheduleOne.Money;
 using UnityEngine.UI;
 using MoreRealisticSleeping.Util;
 
-[assembly: MelonInfo(typeof(MoreRealisticSleeping.MRSCore), "MoreRealisticSleeping (Forked by HazDS)", "1.0.6", "KampfBallerina", null)]
+[assembly: MelonInfo(typeof(MoreRealisticSleeping.MRSCore), "MoreRealisticSleeping (Forked by HazDS)", "1.0.7", "KampfBallerina", null)]
 [assembly: MelonGame("TVGS", "Schedule I")]
 
 namespace MoreRealisticSleeping
@@ -739,7 +739,12 @@ namespace MoreRealisticSleeping
 
         public void RegisterApp(GameObject App, string Title = "Unknown App")
         {
-            GameObject appIcons = GameObject.Find("Player_Local/CameraContainer/Camera/OverlayCamera/GameplayMenu/Phone/phone/HomeScreen/AppIcons");
+            GameObject appIcons = Util.Utils.FindAppIconsContainer();
+            if (appIcons == null)
+            {
+                ((MelonBase)this).LoggerInstance.Error("Could not find AppIcons container to register " + Title);
+                return;
+            }
             App.transform.SetParent(appIcons.transform, worldPositionStays: false);
             ((MelonBase)this).LoggerInstance.Msg("Added " + Title + " to Homescreen.");
         }
